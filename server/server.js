@@ -12,7 +12,7 @@ app.use(express.json());
 connectDB();
 
 app.use("/api/auth", auth);
-// app.use("/api/user", user);
+app.use("/api/user", user);
 
 // Server connection
 app.listen(process.env.PORT, (err) => {
