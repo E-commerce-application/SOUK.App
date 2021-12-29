@@ -1,7 +1,7 @@
 const Order = require("../models/Order");
 
 
-/*********************CREATE Card***********/
+/*********************CREATE Order***********/
 
   exports.createOrder= async (req, res) => {  
   const newOrder = new Order(req.body);

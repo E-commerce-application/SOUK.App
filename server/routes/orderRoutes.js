@@ -12,6 +12,7 @@ const {
 const {
   verifyTokenAndAdmin,
   verifyToken,
+  verifyTokenAndAuthorization,
 } = require("../middlewares/verifyToken");
 
 const Router = express.Router();
