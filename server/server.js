@@ -4,6 +4,7 @@ const express = require("express");
 const connectDB = require("./config/connectDB");
 const auth = require("./routes/authRoutes");
 const user = require("./routes/userRoutes");
+const product = require ("./routes/productRoutes");
 
 const app = express();
 
@@ -13,6 +14,8 @@ connectDB();
 
 app.use("/api/auth", auth);
 app.use("/api/user", user);
+app.use("/api/products", product);
+
 
 // Server connection
 app.listen(process.env.PORT, (err) => {
