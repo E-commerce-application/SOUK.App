@@ -4,9 +4,10 @@ import ProductList from "./pages/ProductList";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
 
 const App = () => {
+  const user = true;
   return (
     <Router>
       <Switch>
@@ -17,7 +18,18 @@ const App = () => {
           <ProductList />
         </Route>
         <Route path="/products/:id">
-          <Product/>
+          <Product />
+        </Route>
+        <Route path="/Cart">
+        <Cart />
+        </Route>
+
+        <Route path="/Login">
+          {user ? <Redirect to="/"/> : <Login/>}
+         </Route>
+
+        <Route path="/Register">
+        {user ? <Redirect to="/"/> : <Register/>}
         </Route>
       </Switch>
     </Router>
