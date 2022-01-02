@@ -7,11 +7,15 @@ const user = require("./routes/userRoutes");
 const product = require ("./routes/productRoutes");
 const order = require ("./routes/orderRoutes");
 const cart = require ("./routes/cartRoutes");
+const cors = require('cors');
+
+
+
 
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json(),);
 
 connectDB();
 
@@ -20,6 +24,10 @@ app.use("/api/user", user);
 app.use("/api/products", product);
 app.use("/api/orders", order);
 app.use("/api/carts", cart);
+app.use(cors({
+  origin: '*'
+}));
+
 
 
 // Server connection
