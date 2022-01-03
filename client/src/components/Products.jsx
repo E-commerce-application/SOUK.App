@@ -24,6 +24,7 @@ const Products = ({ cat, filters, sort }) => {
             : "http://localhost:7000/api/products"
         );
         setProducts(res.data);
+        console.log(products);
       } catch (err) {}
     };
     getProducts();

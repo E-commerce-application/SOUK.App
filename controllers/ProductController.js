@@ -1,12 +1,8 @@
 const Product = require("../models/Product");
 
-
-
-
 /********************CREATE***********************/
 
-
-    exports.createProduct= async (req, res) => {
+exports.createProduct = async (req, res) => {
   const newProduct = new Product(req.body);
 
   try {
@@ -19,7 +15,7 @@ const Product = require("../models/Product");
 
 /************************UPDATE*********************/
 
-    exports.updateProduct= async (req, res) => {
+exports.updateProduct = async (req, res) => {
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
@@ -36,8 +32,7 @@ const Product = require("../models/Product");
 
 /*****************************DELETE**********************/
 
-exports.deleteProduct= async (req, res) => {
-
+exports.deleteProduct = async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
     res.status(200).json("Product has been deleted...");
@@ -48,10 +43,11 @@ exports.deleteProduct= async (req, res) => {
 
 //*******************************GET PRODUCT*************************/
 
-    exports.getProduct= async (req, res) => {
+exports.getingProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     res.status(200).json(product);
+    console.log(req.params.id);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -59,9 +55,10 @@ exports.deleteProduct= async (req, res) => {
 
 /**********************************GET ALL PRODUCTS***********************/
 
-    exports.getAllProduct= async (req, res) => {
+exports.getAllProduct = async (req, res) => {
   const qNew = req.query.new;
   const qCategory = req.query.category;
+
   try {
     let products;
 
@@ -70,7 +67,7 @@ exports.deleteProduct= async (req, res) => {
     } else if (qCategory) {
       products = await Product.find({
         categories: {
-          $in: [qCategory],
+          $in: qCategory,
         },
       });
     } else {
@@ -82,4 +79,3 @@ exports.deleteProduct= async (req, res) => {
     res.status(500).json(err);
   }
 };
-

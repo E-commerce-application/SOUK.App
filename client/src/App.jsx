@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 
 const App = () => {
-  const user = true;
+  const user = false;
   return (
     <Router>
       <Switch>
@@ -22,17 +22,17 @@ const App = () => {
         <Route path="/products/:category">
           <ProductList />
         </Route>
-        <Route path="/product/:id">
-          <Product />
-        </Route>
+        <Route path="/product/:id" render={(rest)=><Product {...rest}/> }/>
+          
+        
         <Route path="/Cart">
           <Cart />
         </Route>
 
-        <Route path="/Login">{user ? <Redirect to="/" /> : <Login />}</Route>
-
-        <Route path="/Register">
+        <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
+        <Route path="/register">
           {user ? <Redirect to="/" /> : <Register />}
+    
         </Route>
       </Switch>
     </Router>
