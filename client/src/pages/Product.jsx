@@ -145,7 +145,7 @@ const Product = (props) => {
   }
 
  
-  const handleQuantity
+  // const handleQuantity
   return (
     <Container>
       <Navbar />
@@ -183,7 +183,7 @@ const Product = (props) => {
               <Amount>{quantity}</Amount>
               <Add onClick={() => handleQuantity("inc")}/>
             </AmountContainer>
-            <Button onClick={handleClick}>ADD TO CART</Button>
+            <Button >ADD TO CART</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>
