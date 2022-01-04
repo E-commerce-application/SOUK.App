@@ -9,6 +9,8 @@ import Newsletter from "../components/Newsletter";
 import { mobile } from "../responsive";
 import { publicRequest } from "../requestMethods";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import {addProduct} from "../JS/Actions/cartActions"
 
 const Container = styled.div``;
 
@@ -70,6 +72,7 @@ const FilterColor = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
+  border-style: double;
   background-color: ${(props) => props.color};
   margin: 0px 5px;
   cursor: pointer;
@@ -125,7 +128,8 @@ const Product = (props) => {
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
-  console.log(setColor);
+  const dispatch = useDispatch();
+
 
   const fetchproduct = async () => {
     const res = await axios.get(
@@ -145,7 +149,11 @@ const Product = (props) => {
   }
 
  
-  // const handleQuantity
+  const handleClick=()=>{
+    dispatch(
+      addProduct({ ...product, quantity, color, size })
+    );
+  };
   return (
     <Container>
       <Navbar />
@@ -183,7 +191,7 @@ const Product = (props) => {
               <Amount>{quantity}</Amount>
               <Add onClick={() => handleQuantity("inc")}/>
             </AmountContainer>
-            <Button >ADD TO CART</Button>
+            <Button onClick={handleClick} >ADD TO CART</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>
