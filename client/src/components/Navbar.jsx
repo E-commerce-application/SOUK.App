@@ -47,13 +47,10 @@ const Input = styled.input`
 const Center = styled.div`
   flex: 1;
   text-align: center;
-
-
 `;
 
 const Logo = styled.h1`
   font-weight: bold;
-  
 
   ${mobile({ fontSize: "24px" })}
 `;
@@ -73,8 +70,8 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = () => {
-  const quantity = useSelector(state=>state.quantity)
-  console.log(quantity)
+  const quantity = useSelector((state) => state.cartReducer.quantity);
+  console.log(quantity);
   return (
     <Container>
       <Wrapper>
@@ -86,23 +83,23 @@ const Navbar = () => {
           </SearchContainer>
         </Left>
         <Center>
-        <Link to='/'>
-          <Logo>SOUK.</Logo>
+          <Link to="/">
+            <Logo>SOUK.</Logo>
           </Link>
         </Center>
         <Right>
           <Link to="/register">
-          <MenuItem>REGISTER</MenuItem>
+            <MenuItem>REGISTER</MenuItem>
           </Link>
           <Link to="/login">
-          <MenuItem>SIGN IN</MenuItem>
+            <MenuItem>SIGN IN</MenuItem>
           </Link>
-          <Link to="/cart ">
-          <MenuItem>
-            <Badge badgeContent={quantity} color="primary">
-              <ShoppingCartOutlined />
-            </Badge>
-          </MenuItem>
+          <Link to="/Cart ">
+            <MenuItem>
+              <Badge badgeContent={quantity} color="primary">
+                <ShoppingCartOutlined />
+              </Badge>
+            </MenuItem>
           </Link>
         </Right>
       </Wrapper>

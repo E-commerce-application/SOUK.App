@@ -1,36 +1,26 @@
-// import { ADD_PRODUCT } from "../ActionTypes/cartActionTypes";
+import { ADD_PRODUCT } from "../ActionTypes/cartActionTypes";
 
-// const initialState= {      
-// products: [],
-// quantity: 0,
-// total: 0,
-// };
+const initialState = {
+  products: [],
+  quantity: 0,
+  total: 0,
+};
 
-//   const cartReducers=( state = initialState , action)=>{
-//     switch(type) {
-    
-//         case ADD_PRODUCT:
-//           return {
-//      ...state,
-//       quantity == quantity + 1,
-//       products = products.push(action.payload),
-//       total = total + action.payload.price * action.payload.quantity,
-//         }; 
+const cartReducers = (state = initialState, { type, payload }) => {
+  switch (type) {
+    case ADD_PRODUCT:
+      return {
+        ...state,
+        quantity: state.quantity + 1,
+        products: [...state.products, payload],
+        total: state.total + payload.price * payload.quantity,
+      };
 
+    default:
+      return state;
+  }
+};
 
-//         default:
-//             return state;
-//          }
-//       };
-
-
-
-
-
-
-
-
-    
-
+export default cartReducers;
 
 //   export default cartReducers;

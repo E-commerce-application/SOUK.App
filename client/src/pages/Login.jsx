@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { userLogin } from "../JS/Actions/userActions";
-import {mobile} from "../responsive";
+import { mobile } from "../responsive";
 
 const Container = styled.div`
   width: 100vw;
@@ -61,25 +61,29 @@ const Link = styled.a`
 `;
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const { isLoding, error } = useSelector((state) => state.userReducers);
 
   const handleClick = (e) => {
     e.preventDefault();
-    userLogin(dispatch, { username, password });
+    dispatch(userLogin({ email, password }));
   };
   return (
     <Container>
       <Wrapper>
         <Title>SIGN IN</Title>
         <Form>
-          <Input placeholder="username" onChange={(e) => setUsername(e.target.value)}/>
-          <Input placeholder="password"
-           type="password"
-           onChange={(e) => setPassword(e.target.value)} />
-          <Button onClick={handleClick} disabled={isLoding}>LOGIN</Button>
+          <Input
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            placeholder="password"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button onClick={(e) => handleClick(e)}>LOGIN</Button>
           <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
           <Link>CREATE A NEW ACCOUNT</Link>
         </Form>
