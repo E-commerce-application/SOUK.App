@@ -18,25 +18,7 @@ const initialState = {
 
 const userReducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case USER_REGISTER:
-      return {
-        ...state,
-        loading: true,
-      };
-    case USER_LOGIN:
-      return {
-        ...state,
-        loading: true,
-      };
-
-    case USER_REGISTER_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        currentUser: payload,
-      };
-
-    case USER_REGISTER_FAILED:
+   
     case USER_LOGIN_FAILED:
       return {
         ...state,
