@@ -37,6 +37,12 @@ const userReducer = (state = initialState, { type, payload }) => {
       };
 
     case USER_REGISTER_FAILED:
+      return {
+        ...state,
+        loading: false,
+        errors: payload,
+        err:true,
+      };
     case USER_LOGIN_FAILED:
       return {
         ...state,
