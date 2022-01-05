@@ -59,11 +59,15 @@ const Link = styled.a`
   text-decoration: underline;
   cursor: pointer;
 `;
+const Error = styled.span`
+  color: red;
+`;
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const error = useSelector((state) => state.userReducer.err);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -83,7 +87,9 @@ const Login = () => {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
+           
           <Button onClick={(e) => handleClick(e)}>LOGIN</Button>
+          {error && <Error>Something went wrong...</Error>}
           <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
           <Link>CREATE A NEW ACCOUNT</Link>
         </Form>

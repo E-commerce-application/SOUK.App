@@ -47,10 +47,12 @@ const Input = styled.input`
 const Center = styled.div`
   flex: 1;
   text-align: center;
+  outline:none;
 `;
 
 const Logo = styled.h1`
   font-weight: bold;
+  outline:none;
 
   ${mobile({ fontSize: "24px" })}
 `;
@@ -59,6 +61,8 @@ const Right = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  text-decoration: none;
+  outline :none;
   ${mobile({ flex: 2, justifyContent: "center" })}
 `;
 

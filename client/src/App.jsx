@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.currentUser);
+  const auth = useSelector((state) => state.userReducer.isAuth);
   return (
     <Router>
       <Switch>
@@ -29,9 +30,9 @@ const App = () => {
           <Cart />
         </Route>
 
-        <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
+        <Route path="/login">{auth ? <Redirect to="/" /> : <Login />}</Route>
         <Route path="/register">
-          {user ? <Redirect to="/" /> : <Register />}
+          <Register />
         </Route>
       </Switch>
     </Router>

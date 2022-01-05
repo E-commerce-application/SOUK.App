@@ -13,6 +13,7 @@ const initialState = {
   currentUser: null,
   errors: null,
   isAuth: false,
+  err:false,
 };
 
 const userReducer = (state = initialState, { type, payload }) => {
@@ -37,6 +38,7 @@ const userReducer = (state = initialState, { type, payload }) => {
         ...state,
         loading: false,
         errors: payload,
+        err:true,
       };
 
     case USER_LOGIN_SUCCESS:
