@@ -150,6 +150,9 @@ const Product = (props) => {
 
  
   const handleClick=()=>{
+    let items=localStorage.getItem("panier")&& []
+    items.push({ ...product, quantity, color, size })
+    localStorage.setItem("panier",items)
     dispatch(
       addProduct({ ...product, quantity, color, size })
     );
