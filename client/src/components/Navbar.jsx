@@ -49,12 +49,12 @@ const Input = styled.input`
 const Center = styled.div`
   flex: 1;
   text-align: center;
-  outline:none;
+  outline: none;
 `;
 
 const Logo = styled.h1`
   font-weight: bold;
-  outline:none;
+  outline: none;
 
   ${mobile({ fontSize: "24px" })}
 `;
@@ -64,7 +64,7 @@ const Right = styled.div`
   align-items: center;
   justify-content: flex-end;
   text-decoration: none;
-  outline :none;
+  outline: none;
   ${mobile({ flex: 2, justifyContent: "center" })}
 `;
 
@@ -76,11 +76,11 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = () => {
-  const auth =useSelector((state) => state.userReducer.isAuth);
+  const auth = useSelector((state) => state.userReducer.isAuth);
   const quantity = useSelector((state) => state.cartReducer.quantity);
   const dispatch = useDispatch();
   console.log(quantity);
-  return (
+  return !localStorage.getItem("accessToken") ? (
     <Container>
       <Wrapper>
         <Left>
@@ -98,31 +98,40 @@ const Navbar = () => {
         <Right>
           <Link to="/register">
             <MenuItem>REGISTER</MenuItem>
-            </Link>
-          {/* </Link>
-        
-            <Link to="/login">
-          <MenuItem>SIGN IN</MenuItem>
-        </Link> */}
-
-        {/* <Link to="/login">
+          </Link>
+          <Link to="/login">
             <MenuItem>SIGN IN</MenuItem>
           </Link>
 
-
-         <MenuItem 
-         onClick={dispatch(logOut())}>SIGN OUT</MenuItem>
           <Link to="/Cart ">
             <MenuItem>
               <Badge badgeContent={quantity} color="primary">
                 <ShoppingCartOutlined />
               </Badge>
             </MenuItem>
-          </Link> */}
-                  
-          <Link to="/login">
-            <MenuItem>SIGN IN</MenuItem>
           </Link>
+        </Right>
+      </Wrapper>
+    </Container>
+  ) : (
+    <Container>
+      <Wrapper>
+        <Left>
+          <Language>EN</Language>
+          <SearchContainer>
+            <Input placeholder="Search" />
+            <Search style={{ color: "gray", fontSize: 16 }} />
+          </SearchContainer>
+        </Left>
+        <Center>
+          <Link to="/">
+            <Logo>SOUK.</Logo>
+          </Link>
+        </Center>
+        <Right>
+          <MenuItem onClick={() => dispatch(logOut())}>SIGN OUT </MenuItem>
+        
+
           <Link to="/Cart ">
             <MenuItem>
               <Badge badgeContent={quantity} color="primary">

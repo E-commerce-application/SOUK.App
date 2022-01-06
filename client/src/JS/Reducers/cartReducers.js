@@ -23,4 +23,3 @@ const cartReducers = (state = initialState, { type, payload }) => {
 
 export default cartReducers;
 
-//   export default cartReducers;

@@ -42,5 +42,5 @@ export const userLogin = (userCred) => async (dispatch) => {
 
 export const logOut = () => (dispatch) => {
   dispatch({ type: LOG_OUT });
-  localStorage.removeItem("token");
+  localStorage.removeItem("accessToken");
 };

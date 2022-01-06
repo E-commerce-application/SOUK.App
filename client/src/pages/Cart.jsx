@@ -5,6 +5,8 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { useEffect } from "react";
 
 const Container = styled.div``;
 
@@ -154,9 +156,20 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
-  const total = useSelector((state) => state.cartReducer.total);
-  const quantity = useSelector((state) => state.cartReducer.quantity);
-  const products = useSelector((state) => state.cartReducer.products);
+  const total = useSelector((state) => state.cartReducers.total);
+  const quantity = useSelector((state) => state.cartReducers.quantity);
+  const products = useSelector((state) => state.cartReducers.products);
+
+  // const getUserCart = async () => {
+  //   const res = await axios.get(
+  //     `/carts/find/${props.match.params.id}`
+  //   );
+  //   getUserCart(res.data);
+  // };
+  // useEffect(() => {
+  //   getUserCart();
+  // }, [props.match]);
+
   return (
     <div>
       <Container>
