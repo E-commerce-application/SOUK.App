@@ -77,17 +77,11 @@ const MenuItem = styled.div`
 
 const Navbar = () => {
   // const auth = useSelector((state) => state.userReducer.isAuth);
+
+  const quantity = JSON.parse(localStorage.getItem('products') === null || localStorage.getItem('products')).length;
+
   
-  const quantity = JSON.parse(localStorage.getItem("products")).length ;
-
-  let cart = JSON.parse(localStorage.getItem("products" ));
-  useEffect(() => {
-
-    if (!cart) { quantity=0 ;
-    }
-   
-  }, [cart])
-
+  
 
   const dispatch = useDispatch();
   console.log(quantity);
