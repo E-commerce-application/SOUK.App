@@ -12,8 +12,18 @@ import {
 } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./style.css";
+import { useEffect } from "react";
 
 const App = () => {
+ 
+  // let cart = JSON.parse(localStorage.getItem("products" ));
+  // useEffect(() => {
+
+  //   if (!cart) { localStorage.setItem("products", []);
+      
+  //   }
+   
+  // }, [cart])
   const user = useSelector((state) => state.userReducer.currentUser);
   const auth = useSelector((state) => state.userReducer.isAuth);
   return (

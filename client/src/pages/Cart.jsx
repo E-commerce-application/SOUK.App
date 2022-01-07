@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Container = styled.div``;
 
@@ -156,9 +156,25 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
+  const [userData, setUserData] = useState("");
+  useEffect(() => {
+    function checkUserData() {
+      const item = localStorage.getItem("panier");
+
+      if (item) {
+        setUserData(item);
+      }
+    }
+
+    // window.addEventListener("storage", checkUserData);
+
+    return () => {
+      checkUserData();
+    };
+  }, []);
   const total = useSelector((state) => state.cartReducers.total);
   const quantity = useSelector((state) => state.cartReducers.quantity);
-  const products = useSelector((state) => state.cartReducers.products);
+  // const products = useSelector((state) => state.cartReducers.products);
 
   // const getUserCart = async () => {
   //   const res = await axios.get(
@@ -172,8 +188,10 @@ const Cart = () => {
 
   return (
     <div>
-      <Container>
-        <Navbar />
+    
+
+       <Container>
+         <Navbar />
         <Announcement />
         <Wrapper>
           <Title>YOUR BAG</Title>
@@ -187,7 +205,7 @@ const Cart = () => {
           </Top>
           <Bottom>
             <Info>
-              {products.map((product) => (
+              {setUserData.map((product) => (
                 <Product>
                   <ProductDetail>
                     <Image src={product.img} />
@@ -220,7 +238,7 @@ const Cart = () => {
               <SummaryTitle>ORDER SUMMARY</SummaryTitle>
               <SummaryItem>
                 <SummaryItemText>Subtotal</SummaryItemText>
-                <SummaryItemPrice>$ {total}</SummaryItemPrice>
+                 <SummaryItemPrice>$ {total}</SummaryItemPrice> 
               </SummaryItem>
               <SummaryItem>
                 <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -232,14 +250,14 @@ const Cart = () => {
               </SummaryItem>
               <SummaryItem type="total">
                 <SummaryItemText>Total</SummaryItemText>
-                <SummaryItemPrice>{total}</SummaryItemPrice>
+                 <SummaryItemPrice>{total}</SummaryItemPrice> 
               </SummaryItem>
               <Button>CHECKOUT NOW</Button>
             </Summary>
           </Bottom>
         </Wrapper>
         <Footer />
-      </Container>
+      </Container> 
     </div>
   );
 };

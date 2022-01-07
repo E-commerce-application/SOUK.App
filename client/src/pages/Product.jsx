@@ -10,7 +10,7 @@ import { mobile } from "../responsive";
 import { publicRequest } from "../requestMethods";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import {addProduct} from "../JS/Actions/cartActions"
+import { addProduct } from "../JS/Actions/cartActions";
 
 const Container = styled.div``;
 
@@ -130,7 +130,6 @@ const Product = (props) => {
   const [size, setSize] = useState("");
   const dispatch = useDispatch();
 
-
   const fetchproduct = async () => {
     const res = await axios.get(
       `http://localhost:7000/api/products/find/${props.match.params.id}`
@@ -142,20 +141,34 @@ const Product = (props) => {
     fetchproduct();
   }, [props.match]);
 
-  const  handleQuantity =(type) =>{
-    if(type==="dec"){
-      quantity > 1 && setQuantity(quantity-1);
-    }else   {setQuantity(quantity+1)}
-  }
+  const handleQuantity = (type) => {
+    if (type === "dec") {
+      quantity > 1 && setQuantity(quantity - 1);
+    } else {
+      setQuantity(quantity + 1);
+    }
+  };
 
- 
-  const handleClick=()=>{
-    let items=localStorage.getItem("panier")&& []
-    items.push({ ...product, quantity, color, size })
-    localStorage.setItem("panier",items)
-    dispatch(
-      addProduct({ ...product, quantity, color, size })
-    );
+  const handleClick = () => {
+    //LS
+
+    let products = [];
+    if (localStorage.getItem("products")) {
+      products = JSON.parse(localStorage.getItem("products"));
+    } 
+    products.push({ ...product, quantity, color, size });
+    localStorage.setItem("products", JSON.stringify(products));
+
+    // let items = JSON.parse(localStorage.getItem("panier")) || [];
+    // localStorage.removeItem("panier");
+
+    // let newItem = items.push({ ...product, quantity, color, size });
+    // console.log("new", newItem);
+
+    // let st = localStorage.setItem("panier", JSON.stringify(items));
+
+    //redux
+    dispatch(addProduct({ ...product, quantity, color, size }));
   };
   return (
     <Container>
@@ -173,15 +186,13 @@ const Product = (props) => {
             <Filter>
               <FilterTitle>Color</FilterTitle>
               {product.color?.map((c) => (
-               <FilterColor color={c} key={c} onClick={() => setColor(c)} />
-              ))} 
-              
+                <FilterColor color={c} key={c} onClick={() => setColor(c)} />
+              ))}
             </Filter>
-            
-          
+
             <Filter>
               <FilterTitle>Size</FilterTitle>
-              <FilterSize onChange={(e)=>setSize(e.target.value)} >
+              <FilterSize onChange={(e) => setSize(e.target.value)}>
                 {product.size?.map((s) => (
                   <FilterSizeOption key={s}>{s}</FilterSizeOption>
                 ))}
@@ -190,11 +201,11 @@ const Product = (props) => {
           </FilterContainer>
           <AddContainer>
             <AmountContainer>
-            <Remove onClick={() => handleQuantity("dec")} />
+              <Remove onClick={() => handleQuantity("dec")} />
               <Amount>{quantity}</Amount>
-              <Add onClick={() => handleQuantity("inc")}/>
+              <Add onClick={() => handleQuantity("inc")} />
             </AmountContainer>
-            <Button onClick={handleClick} >ADD TO CART</Button>
+            <Button onClick={handleClick}>ADD TO CART</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>

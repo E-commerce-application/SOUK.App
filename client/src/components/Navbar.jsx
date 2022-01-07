@@ -1,6 +1,6 @@
 import { Badge } from "@material-ui/core";
 import { Search, ShoppingCartOutlined } from "@material-ui/icons";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { mobile } from "../responsive";
@@ -76,8 +76,19 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = () => {
-  const auth = useSelector((state) => state.userReducer.isAuth);
-  const quantity = useSelector((state) => state.cartReducer.quantity);
+  // const auth = useSelector((state) => state.userReducer.isAuth);
+  
+  const quantity = JSON.parse(localStorage.getItem("products")).length ;
+
+  let cart = JSON.parse(localStorage.getItem("products" ));
+  useEffect(() => {
+
+    if (!cart) { quantity=0 ;
+    }
+   
+  }, [cart])
+
+
   const dispatch = useDispatch();
   console.log(quantity);
   return !localStorage.getItem("accessToken") ? (
