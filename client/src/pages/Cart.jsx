@@ -1,12 +1,12 @@
 import { Add, Remove } from "@material-ui/icons";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
-import { useSelector } from "react-redux";
-import axios from "axios";
-import { useEffect, useState } from "react";
 
 const Container = styled.div``;
 
@@ -50,6 +50,7 @@ const Bottom = styled.div`
   display: flex;
   justify-content: space-between;
   ${mobile({ flexDirection: "column" })}
+
 `;
 
 const Info = styled.div`
@@ -156,109 +157,105 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
-  const [userData, setUserData] = useState("");
-  useEffect(() => {
-    function checkUserData() {
-      const item = localStorage.getItem("panier");
+  // const [quantity, setQuantity] = useState(1);
 
-      if (item) {
-        setUserData(item);
-      }
-    }
-
-    // window.addEventListener("storage", checkUserData);
-
-    return () => {
-      checkUserData();
-    };
-  }, []);
-  const total = useSelector((state) => state.cartReducers.total);
-  const quantity = useSelector((state) => state.cartReducers.quantity);
-  // const products = useSelector((state) => state.cartReducers.products);
-
-  // const getUserCart = async () => {
-  //   const res = await axios.get(
-  //     `/carts/find/${props.match.params.id}`
-  //   );
-  //   getUserCart(res.data);
-  // };
-  // useEffect(() => {
-  //   getUserCart();
-  // }, [props.match]);
-
+  const storageItems = JSON.parse(localStorage.getItem('products'));
+ let total=0; 
+//  const handleQuantity = (type) => {
+  
+//   if (type === "dec") {
+//     storageItems[i].quantity > 1 && storageItems[i].quantity - 1
+//   } else {
+//     storageItems[i].quantity + 1;
+//   }
+//   localStorage.setItem('products', JSON.stringify(storageItems));
+// };
+  
   return (
-    <div>
     
+    <Container>
+      <Navbar />
+      <Announcement />
+      <Wrapper>
+        <Title>YOUR BAG</Title>
+        <Top>
+          <Link to="/">
+          <TopButton>CONTINUE SHOPPING</TopButton>
+          </Link>
+          <TopTexts>
+            <TopText>Shopping Bag(2)</TopText>
+            <TopText>Your Wishlist (0)</TopText>
+          </TopTexts>
+          <TopButton type="filled">CHECKOUT NOW</TopButton>
+        </Top>
+        <Bottom>
+          <Info>
 
-       <Container>
-         <Navbar />
-        <Announcement />
-        <Wrapper>
-          <Title>YOUR BAG</Title>
-          <Top>
-            <TopButton>CONTINUE SHOPPING</TopButton>
-            <TopTexts>
-              <TopText>Shopping Bag(2)</TopText>
-              <TopText>Your Wishlist (0)</TopText>
-            </TopTexts>
-            <TopButton type="filled">CHECKOUT NOW</TopButton>
-          </Top>
-          <Bottom>
-            <Info>
-              {setUserData.map((product) => (
-                <Product>
-                  <ProductDetail>
-                    <Image src={product.img} />
-                    <Details>
-                      <ProductName>
-                        <b>Product:</b> {product.title}
-                      </ProductName>
-                      <ProductId>
-                        <b>ID:</b> {product._id}
-                      </ProductId>
-                      <ProductColor color={product.color} />
-                      <ProductSize>
-                        <b>Size:</b> {product.size}
-                      </ProductSize>
-                    </Details>
-                  </ProductDetail>
-                  <PriceDetail>
-                    <ProductAmountContainer>
-                      <Add />
-                      <ProductAmount>{product.quantity}</ProductAmount>
-                      <Remove />
-                    </ProductAmountContainer>
-                    <ProductPrice>$ {product.price * quantity}</ProductPrice>
-                  </PriceDetail>
-                </Product>
-              ))}
-              <Hr />
-            </Info>
-            <Summary>
-              <SummaryTitle>ORDER SUMMARY</SummaryTitle>
-              <SummaryItem>
-                <SummaryItemText>Subtotal</SummaryItemText>
-                 <SummaryItemPrice>$ {total}</SummaryItemPrice> 
-              </SummaryItem>
-              <SummaryItem>
-                <SummaryItemText>Estimated Shipping</SummaryItemText>
-                <SummaryItemPrice>$ 5.90</SummaryItemPrice>
-              </SummaryItem>
-              <SummaryItem>
-                <SummaryItemText>Shipping Discount</SummaryItemText>
-                <SummaryItemPrice>$ -5.90</SummaryItemPrice>
-              </SummaryItem>
-              <SummaryItem type="total">
-                <SummaryItemText>Total</SummaryItemText>
-                 <SummaryItemPrice>{total}</SummaryItemPrice> 
-              </SummaryItem>
-              <Button>CHECKOUT NOW</Button>
-            </Summary>
-          </Bottom>
-        </Wrapper>
-        <Footer />
-      </Container> 
-    </div>
+          {storageItems.map((item) => ( 
+      
+          <Product style={{marginBottom:"10px"}}>
+              <ProductDetail>
+                <Image src={item.img} />
+                <Details>
+                  <ProductName>
+                    <b>Product:</b> {item.title}
+                  </ProductName>
+                  <ProductId>
+                    <b>ID:</b> {item._id}
+                  </ProductId>
+                  <ProductColor color={item.color} />
+                  <ProductSize>
+                    <b>Size:</b> {item.size}
+                  </ProductSize>
+                </Details>
+              </ProductDetail>
+              <PriceDetail>
+                <ProductAmountContainer>
+                  <Add />
+                  <ProductAmount>{item.quantity}</ProductAmount>
+                  <Remove  />
+
+              
+                </ProductAmountContainer>
+                <ProductPrice>$ {item.price*item.quantity}</ProductPrice>
+              </PriceDetail>
+            
+            </Product>
+            
+          
+          
+          ))}
+
+          
+          </Info>
+          <div style={{color:"white"}}>
+          {storageItems.map((el) => (total+=el.price* el.quantity))}
+          </div>
+          
+          <Summary>
+            <SummaryTitle>ORDER SUMMARY</SummaryTitle>
+            <SummaryItem>
+              <SummaryItemText>Subtotal</SummaryItemText>
+              <SummaryItemPrice>${total}</SummaryItemPrice>
+            </SummaryItem>
+            <SummaryItem>
+              <SummaryItemText>Discount</SummaryItemText>
+              <SummaryItemPrice>10 %</SummaryItemPrice>
+            </SummaryItem>
+            <SummaryItem>
+              <SummaryItemText>Shipping Discount</SummaryItemText>
+              <SummaryItemPrice>$ {total/10}</SummaryItemPrice>
+            </SummaryItem>
+            <SummaryItem type="total">
+              <SummaryItemText>Total</SummaryItemText>
+              <SummaryItemPrice>${total-total/10}</SummaryItemPrice>
+            </SummaryItem>
+            <Button>CHECKOUT NOW</Button>
+          </Summary>
+        </Bottom>
+      </Wrapper>
+      <Footer />
+    </Container>
   );
 };
 
