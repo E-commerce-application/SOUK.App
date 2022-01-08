@@ -174,6 +174,8 @@ const Cart = () => {
   };
 
   const reduLocalProductHandler = (id) => {
+    // e.preventDefault();
+
     let products = JSON.parse(localStorage.getItem("products"));
     products.map((prod) =>
       prod._id === id ? { ...prod, quantity: prod.quantity >1 && prod.quantity-- } : null
@@ -181,6 +183,27 @@ const Cart = () => {
     localStorage.setItem("products", JSON.stringify(products));
     storageItems = products;
   };
+  
+    // const handledelete=(item)=>{
+    //   let products=JSON.parse(localStorage.getItem("products"))
+   
+    //   let index=parseInt(item)
+     
+    //  products=products.splice(index, 1)
+    //  localStorage.setItem('products',JSON.stringify(products))
+    
+    // };
+
+
+    const handledelete=(_id)=>{
+		
+      let items = JSON.parse(localStorage.getItem("products"));
+      let index = items.findIndex(x => x._id ==_id);
+      items.map((prod) => prod._id === _id ? items.splice(index, 1): items=items)
+
+        localStorage.setItem("products", JSON.stringify(items));
+      
+    }
 
   return (
     <Container>
@@ -224,7 +247,10 @@ const Cart = () => {
                     <Add onClick={() => addLocalProductHandler(item._id)} />
                   </ProductAmountContainer>
                   <ProductPrice>$ {item.price * item.quantity}</ProductPrice>
+                  <button onClick={handledelete(item._id)}>DELETE</button>
+                  
                 </PriceDetail>
+               
               </Product>
             ))}
           </Info>
