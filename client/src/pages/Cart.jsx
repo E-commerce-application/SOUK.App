@@ -195,15 +195,23 @@ const Cart = () => {
     // };
 
 
-    const handledelete=(_id)=>{
+    // const handledelete=(_id)=>{
 		
-      let items = JSON.parse(localStorage.getItem("products"));
-      let index = items.findIndex(x => x._id ==_id);
-      items.map((prod) => prod._id === _id ? items.splice(index, 1): items=items)
+    //   let items = JSON.parse(localStorage.getItem("products"));
+    //   let index = items.findIndex(x => x._id ==_id);
+    //   items.map((prod) => prod._id === _id ? items.splice(index, 1): items=items)
 
-        localStorage.setItem("products", JSON.stringify(items));
-      
-    }
+    //     localStorage.setItem("products", JSON.stringify(items));
+    // }
+    // const removeFromCart=(_id)=>{
+    
+    //   const items = JSON.parse(localStorage.getItem("products"));
+    //    for (let i = 0; i < items.length; i += 1) {
+    //      if (items[i]._id === _id) {items.splice(i, 1)}
+    //       localStorage.setItem("products", JSON.stringify(items));
+    //   };
+    // }
+
 
   return (
     <Container>
@@ -247,7 +255,14 @@ const Cart = () => {
                     <Add onClick={() => addLocalProductHandler(item._id)} />
                   </ProductAmountContainer>
                   <ProductPrice>$ {item.price * item.quantity}</ProductPrice>
-                  <button onClick={handledelete(item._id)}>DELETE</button>
+                  <button onClick={()=>{
+    
+    const items = JSON.parse(localStorage.getItem("products"));
+     for (let i = 0; i < items.length; i += 1) {
+       if (items[i]._id ===item._id) {items.splice(i, 1)}
+        localStorage.setItem("products", JSON.stringify(items));
+    };
+  }}>DELETE</button>
                   
                 </PriceDetail>
                
