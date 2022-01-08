@@ -1,5 +1,5 @@
 import { Add, Remove } from "@material-ui/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -50,7 +50,6 @@ const Bottom = styled.div`
   display: flex;
   justify-content: space-between;
   ${mobile({ flexDirection: "column" })}
-
 `;
 
 const Info = styled.div`
@@ -107,9 +106,14 @@ const ProductAmountContainer = styled.div`
 `;
 
 const ProductAmount = styled.div`
-  font-size: 24px;
-  margin: 5px;
-  ${mobile({ margin: "5px 15px" })}
+width: 30px;
+height: 30px;
+border-radius: 10px;
+border: 1px solid teal;
+display: flex;
+align-items: center;
+justify-content: center;
+margin: 0px 5px;
 `;
 
 const ProductPrice = styled.div`
@@ -118,11 +122,7 @@ const ProductPrice = styled.div`
   ${mobile({ marginBottom: "20px" })}
 `;
 
-const Hr = styled.hr`
-  background-color: #eee;
-  border: none;
-  height: 1px;
-`;
+
 
 const Summary = styled.div`
   flex: 1;
@@ -157,22 +157,32 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
-  // const [quantity, setQuantity] = useState(1);
 
-  const storageItems = JSON.parse(localStorage.getItem('products'));
- let total=0; 
-//  const handleQuantity = (type) => {
-  
-//   if (type === "dec") {
-//     storageItems[i].quantity > 1 && storageItems[i].quantity - 1
-//   } else {
-//     storageItems[i].quantity + 1;
-//   }
-//   localStorage.setItem('products', JSON.stringify(storageItems));
-// };
-  
+  let storageItems = JSON.parse(localStorage.getItem("products"));
+
+  let total = 0;
+
+ 
+
+  const addLocalProductHandler = (id) => {
+    let products = JSON.parse(localStorage.getItem("products"));
+    products.map((prod) =>
+      prod._id === id ? { ...prod, quantity: prod.quantity++} : null
+    );
+    localStorage.setItem("products", JSON.stringify(products));
+    storageItems = products;
+  };
+
+  const reduLocalProductHandler = (id) => {
+    let products = JSON.parse(localStorage.getItem("products"));
+    products.map((prod) =>
+      prod._id === id ? { ...prod, quantity: prod.quantity >1 && prod.quantity-- } : null
+    );
+    localStorage.setItem("products", JSON.stringify(products));
+    storageItems = products;
+  };
+
   return (
-    
     <Container>
       <Navbar />
       <Announcement />
@@ -180,7 +190,7 @@ const Cart = () => {
         <Title>YOUR BAG</Title>
         <Top>
           <Link to="/">
-          <TopButton>CONTINUE SHOPPING</TopButton>
+            <TopButton>CONTINUE SHOPPING</TopButton>
           </Link>
           <TopTexts>
             <TopText>Shopping Bag(2)</TopText>
@@ -190,48 +200,38 @@ const Cart = () => {
         </Top>
         <Bottom>
           <Info>
-
-          {storageItems.map((item) => ( 
-      
-          <Product style={{marginBottom:"10px"}}>
-              <ProductDetail>
-                <Image src={item.img} />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> {item.title}
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> {item._id}
-                  </ProductId>
-                  <ProductColor color={item.color} />
-                  <ProductSize>
-                    <b>Size:</b> {item.size}
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>{item.quantity}</ProductAmount>
-                  <Remove  />
-
-              
-                </ProductAmountContainer>
-                <ProductPrice>$ {item.price*item.quantity}</ProductPrice>
-              </PriceDetail>
-            
-            </Product>
-            
-          
-          
-          ))}
-
-          
+            {storageItems.map((item) => (
+              <Product style={{ marginBottom: "10px" }}>
+                <ProductDetail>
+                  <Image src={item.img} />
+                  <Details>
+                    <ProductName>
+                      <b>Product:</b> {item.title}
+                    </ProductName>
+                    <ProductId>
+                      <b>ID:</b> {item._id}
+                    </ProductId>
+                    <ProductColor color={item.color} />
+                    <ProductSize>
+                      <b>Size:</b> {item.size}
+                    </ProductSize>
+                  </Details>
+                </ProductDetail>
+                <PriceDetail>
+                  <ProductAmountContainer>
+                    <Remove onClick={() => reduLocalProductHandler(item._id)} />
+                    <ProductAmount>{item.quantity}</ProductAmount>
+                    <Add onClick={() => addLocalProductHandler(item._id)} />
+                  </ProductAmountContainer>
+                  <ProductPrice>$ {item.price * item.quantity}</ProductPrice>
+                </PriceDetail>
+              </Product>
+            ))}
           </Info>
-          <div style={{color:"white"}}>
-          {storageItems.map((el) => (total+=el.price* el.quantity))}
+          <div style={{ color: "white" }}>
+            {storageItems.map((el) => (total += el.price * el.quantity))}
           </div>
-          
+
           <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
@@ -244,11 +244,11 @@ const Cart = () => {
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Shipping Discount</SummaryItemText>
-              <SummaryItemPrice>$ {total/10}</SummaryItemPrice>
+              <SummaryItemPrice>$ {total / 10}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>${total-total/10}</SummaryItemPrice>
+              <SummaryItemPrice>${total - total / 10}</SummaryItemPrice>
             </SummaryItem>
             <Button>CHECKOUT NOW</Button>
           </Summary>

@@ -159,15 +159,7 @@ const Product = (props) => {
     products.push({ ...product, quantity, color, size });
     localStorage.setItem("products", JSON.stringify(products));
 
-    // let items = JSON.parse(localStorage.getItem("panier")) || [];
-    // localStorage.removeItem("panier");
-
-    // let newItem = items.push({ ...product, quantity, color, size });
-    // console.log("new", newItem);
-
-    // let st = localStorage.setItem("panier", JSON.stringify(items));
-
-    //redux
+    
     dispatch(addProduct({ ...product, quantity, color, size }));
   };
   return (
