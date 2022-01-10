@@ -1,12 +1,14 @@
 import { Add, Remove } from "@material-ui/icons";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import { deleteProduct } from "../JS/Actions/cartActions";
 import { mobile } from "../responsive";
+
 
 const Container = styled.div``;
 
@@ -106,14 +108,14 @@ const ProductAmountContainer = styled.div`
 `;
 
 const ProductAmount = styled.div`
-width: 30px;
-height: 30px;
-border-radius: 10px;
-border: 1px solid teal;
-display: flex;
-align-items: center;
-justify-content: center;
-margin: 0px 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  border: 1px solid teal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px 5px;
 `;
 
 const ProductPrice = styled.div`
@@ -121,8 +123,6 @@ const ProductPrice = styled.div`
   font-weight: 200;
   ${mobile({ marginBottom: "20px" })}
 `;
-
-
 
 const Summary = styled.div`
   flex: 1;
@@ -157,20 +157,39 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
+  const [total, setTotal] = useState(0);
+  const [afterDiscout, setAfterDiscout] = useState(0);
+  const [shippingFees, setShippingFees] = useState(0);
+  const [storageItems, setstorageItems] = useState(
+    JSON.parse(localStorage.getItem("products"))
+  );
 
-  let storageItems = JSON.parse(localStorage.getItem("products"));
+  useEffect(() => {
+    setstorageItems(JSON.parse(localStorage.getItem("products")));
+  }, []);
 
-  let total = 0;
+  useEffect(() => {
+    calculateTotal();
+  }, [storageItems]);
 
- 
+  useEffect(() => {
+    setAfterDiscout(total * 0.9);
+    setShippingFees(total/10);
+  }, [total]);
+
+  const calculateTotal = async () => {
+    let toCalculate = 0;
+    await storageItems.map((el) => (toCalculate += el.price * el.quantity));
+    await setTotal(toCalculate);
+  };
+  
 
   const addLocalProductHandler = (id) => {
-    let products = JSON.parse(localStorage.getItem("products"));
-    products.map((prod) =>
-      prod._id === id ? { ...prod, quantity: prod.quantity++} : null
+    storageItems.map((prod) =>
+      prod._id === id ? { ...prod, quantity: prod.quantity++ } : null
     );
-    localStorage.setItem("products", JSON.stringify(products));
-    storageItems = products;
+    localStorage.setItem("products", JSON.stringify(storageItems));
+    storageItems = storageItems;
   };
 
   const reduLocalProductHandler = (id) => {
@@ -178,41 +197,24 @@ const Cart = () => {
 
     let products = JSON.parse(localStorage.getItem("products"));
     products.map((prod) =>
-      prod._id === id ? { ...prod, quantity: prod.quantity >1 && prod.quantity-- } : null
+      prod._id === id
+        ? { ...prod, quantity: prod.quantity > 1 && prod.quantity-- }
+        : null
     );
     localStorage.setItem("products", JSON.stringify(products));
     storageItems = products;
   };
-  
-    // const handledelete=(item)=>{
-    //   let products=JSON.parse(localStorage.getItem("products"))
-   
-    //   let index=parseInt(item)
-     
-    //  products=products.splice(index, 1)
-    //  localStorage.setItem('products',JSON.stringify(products))
-    
-    // };
 
-
-    // const handledelete=(_id)=>{
-		
-    //   let items = JSON.parse(localStorage.getItem("products"));
-    //   let index = items.findIndex(x => x._id ==_id);
-    //   items.map((prod) => prod._id === _id ? items.splice(index, 1): items=items)
-
-    //     localStorage.setItem("products", JSON.stringify(items));
-    // }
-    // const removeFromCart=(_id)=>{
-    
-    //   const items = JSON.parse(localStorage.getItem("products"));
-    //    for (let i = 0; i < items.length; i += 1) {
-    //      if (items[i]._id === _id) {items.splice(i, 1)}
-    //       localStorage.setItem("products", JSON.stringify(items));
-    //   };
-    // }
-
-
+  // const DeleteItem = (item) => {
+  //   const items = JSON.parse(localStorage.getItem("products"));
+  //   for (let i = 0; i < items.length; i += 1) {
+  //     if (items[i]._id === item._id) {
+  //       items.splice(i, 1);
+  //     }
+  //     localStorage.setItem("products", JSON.stringify(items));
+  //   }
+  // };
+  let dispatch = useDispatch();
   return (
     <Container>
       <Navbar />
@@ -255,23 +257,14 @@ const Cart = () => {
                     <Add onClick={() => addLocalProductHandler(item._id)} />
                   </ProductAmountContainer>
                   <ProductPrice>$ {item.price * item.quantity}</ProductPrice>
-                  <button onClick={()=>{
-    
-    const items = JSON.parse(localStorage.getItem("products"));
-     for (let i = 0; i < items.length; i += 1) {
-       if (items[i]._id ===item._id) {items.splice(i, 1)}
-        localStorage.setItem("products", JSON.stringify(items));
-    };
-  }}>DELETE</button>
-                  
+                  {/* <button onClick={() => dispatch(deleteProduct())}  >
+                    DELETE
+                  </button> */}
                 </PriceDetail>
-               
               </Product>
             ))}
           </Info>
-          <div style={{ color: "white" }}>
-            {storageItems.map((el) => (total += el.price * el.quantity))}
-          </div>
+          <div style={{ color: "white" }}>{total}</div>
 
           <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
@@ -285,11 +278,11 @@ const Cart = () => {
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Shipping Discount</SummaryItemText>
-              <SummaryItemPrice>$ {total / 10}</SummaryItemPrice>
+              <SummaryItemPrice>$ {shippingFees}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>${total - total / 10}</SummaryItemPrice>
+              <SummaryItemPrice>${afterDiscout}</SummaryItemPrice>
             </SummaryItem>
             <Button>CHECKOUT NOW</Button>
           </Summary>

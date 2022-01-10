@@ -1,19 +1,68 @@
-import { ADD_PRODUCT } from "../ActionTypes/cartActionTypes";
+import {
+  LOG_OUT,
+  USER_LOGIN,
+  USER_LOGIN_FAILED,
+  USER_LOGIN_SUCCESS,
+  USER_REGISTER,
+  USER_REGISTER_FAILED,
+  USER_REGISTER_SUCCESS,
+} from "../ActionTypes/userActionsTypes.js";
 
 const initialState = {
-  products: [],
-  quantity: 0,
-  total: 0,
+  loading: false,
+  currentUser: null,
+  errors: null,
+  isAuth: false,
+  err:false,
 };
 
-const cartReducers = (state = initialState, { type, payload }) => {
+const userReducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case ADD_PRODUCT:
+    case USER_REGISTER:
       return {
         ...state,
-        quantity: state.quantity + 1,
-        products: [...state.products, payload],
-        total: state.total + payload.price * payload.quantity,
+        loading: true,
+      };
+    case USER_LOGIN:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case USER_REGISTER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        currentUser: payload,
+      };
+
+    case USER_REGISTER_FAILED:
+      return {
+        ...state,
+        loading: false,
+        errors: payload,
+        err:true,
+      };
+    case USER_LOGIN_FAILED:
+      return {
+        ...state,
+        loading: false,
+        errors: payload,
+        err:true,
+      };
+
+    case USER_LOGIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isAuth: true,
+        msg: payload,
+      };
+
+    case LOG_OUT:
+      return {
+        ...state,
+        isAuth: false,
       };
 
     default:
@@ -21,5 +70,4 @@ const cartReducers = (state = initialState, { type, payload }) => {
   }
 };
 
-export default cartReducers;
-
+export default userReducer;

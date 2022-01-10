@@ -1,12 +1,13 @@
 import { Badge } from "@material-ui/core";
 import { Search, ShoppingCartOutlined } from "@material-ui/icons";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logOut } from "../JS/Actions/userActions";
+import { useStore } from "react-redux";
 
 const Container = styled.div`
   height: 60px;
@@ -78,13 +79,24 @@ const MenuItem = styled.div`
 const Navbar = () => {
   // const auth = useSelector((state) => state.userReducer.isAuth);
 
-  const quantity = JSON.parse(localStorage.getItem('products') === null || localStorage.getItem('products')).length;
+  let [quantity, setquantity] = useState(
+    JSON.parse(
+      localStorage.getItem("products") === null ||
+        localStorage.getItem("products")
+    ).length
+  );
 
+  useEffect(() => {
+    setquantity(
+      JSON.parse(
+        localStorage.getItem("products") === null ||
+          localStorage.getItem("products")
+      ).length
+    );
+  }, []);
   
-  
+ let dispatch = useDispatch();
 
-  const dispatch = useDispatch();
-  console.log(quantity);
   return !localStorage.getItem("accessToken") ? (
     <Container>
       <Wrapper>
@@ -135,7 +147,6 @@ const Navbar = () => {
         </Center>
         <Right>
           <MenuItem onClick={() => dispatch(logOut())}>SIGN OUT </MenuItem>
-        
 
           <Link to="/Cart ">
             <MenuItem>
