@@ -1,12 +1,11 @@
 import { Add, Remove } from "@material-ui/icons";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import { deleteProduct } from "../JS/Actions/cartActions";
 import { mobile } from "../responsive";
 
 
@@ -161,11 +160,11 @@ const Cart = () => {
   const [afterDiscout, setAfterDiscout] = useState(0);
   const [shippingFees, setShippingFees] = useState(0);
   const [storageItems, setstorageItems] = useState(
-    JSON.parse(localStorage.getItem("products"))
+    JSON.parse(localStorage.getItem("cart"))
   );
 
   useEffect(() => {
-    setstorageItems(JSON.parse(localStorage.getItem("products")));
+    setstorageItems(JSON.parse(localStorage.getItem("cart")));
   }, []);
 
   useEffect(() => {
@@ -180,7 +179,7 @@ const Cart = () => {
   const calculateTotal = async () => {
     let toCalculate = 0;
     await storageItems.map((el) => (toCalculate += el.price * el.quantity));
-    await setTotal(toCalculate);
+     setTotal(toCalculate);
   };
   
 
@@ -188,22 +187,30 @@ const Cart = () => {
     storageItems.map((prod) =>
       prod._id === id ? { ...prod, quantity: prod.quantity++ } : null
     );
-    localStorage.setItem("products", JSON.stringify(storageItems));
+    localStorage.setItem("cart", JSON.stringify(storageItems));
     storageItems = storageItems;
   };
 
   const reduLocalProductHandler = (id) => {
     // e.preventDefault();
 
-    let products = JSON.parse(localStorage.getItem("products"));
+    let products = JSON.parse(localStorage.getItem("cart"));
     products.map((prod) =>
       prod._id === id
         ? { ...prod, quantity: prod.quantity > 1 && prod.quantity-- }
         : null
     );
-    localStorage.setItem("products", JSON.stringify(products));
+    localStorage.setItem("cart", JSON.stringify(products));
     storageItems = products;
   };
+
+  // const qtyChangeHandler = (id, qty) => {
+  //   dispatch(addToCart(id, qty));
+  // };
+
+  // const removeFromCartHandler = (id) => {
+  //   dispatch(removeFromCart(id));
+  // };
 
   // const DeleteItem = (item) => {
   //   const items = JSON.parse(localStorage.getItem("products"));
@@ -214,6 +221,9 @@ const Cart = () => {
   //     localStorage.setItem("products", JSON.stringify(items));
   //   }
   // };
+  const cart = useSelector((state) => state.cart);
+  const { cartItems } = cart;
+  useEffect(() => {}, []);
   let dispatch = useDispatch();
   return (
     <Container>
@@ -233,7 +243,12 @@ const Cart = () => {
         </Top>
         <Bottom>
           <Info>
-            {storageItems.map((item) => (
+          {cartItems.length === 0 ? (
+            <div>
+              Your Bag Is Empty 🛒...
+            </div>
+          ) : (
+           cartItems.map((item) => (
               <Product style={{ marginBottom: "10px" }}>
                 <ProductDetail>
                   <Image src={item.img} />
@@ -242,7 +257,7 @@ const Cart = () => {
                       <b>Product:</b> {item.title}
                     </ProductName>
                     <ProductId>
-                      <b>ID:</b> {item._id}
+                      <b>ID:</b> {item.id}
                     </ProductId>
                     <ProductColor color={item.color} />
                     <ProductSize>
@@ -257,12 +272,10 @@ const Cart = () => {
                     <Add onClick={() => addLocalProductHandler(item._id)} />
                   </ProductAmountContainer>
                   <ProductPrice>$ {item.price * item.quantity}</ProductPrice>
-                  {/* <button onClick={() => dispatch(deleteProduct())}  >
-                    DELETE
-                  </button> */}
+                  
                 </PriceDetail>
               </Product>
-            ))}
+            )))}
           </Info>
           <div style={{ color: "white" }}>{total}</div>
 

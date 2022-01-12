@@ -81,16 +81,16 @@ const Navbar = () => {
 
   let [quantity, setquantity] = useState(
     JSON.parse(
-      localStorage.getItem("products") === null ||
-        localStorage.getItem("products")
+      localStorage.getItem("cart") === null ||
+        localStorage.getItem("cart")
     ).length
   );
 
   useEffect(() => {
     setquantity(
       JSON.parse(
-        localStorage.getItem("products") === null ||
-          localStorage.getItem("products")
+        localStorage.getItem("cart") === null ||
+          localStorage.getItem("cart")
       ).length
     );
   }, []);

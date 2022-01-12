@@ -10,7 +10,8 @@ import { mobile } from "../responsive";
 import { publicRequest } from "../requestMethods";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { addProduct } from "../JS/Actions/cartActions";
+import { addProduct, addToCart } from "../JS/Actions/cartActions";
+import { v4 as uuidv4 } from "uuid";
 
 const Container = styled.div``;
 
@@ -128,7 +129,9 @@ const Product = (props) => {
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
+  // const [comId,setComId]=useState("");
   const dispatch = useDispatch();
+  
 
   const fetchproduct = async () => {
     const res = await axios.get(
@@ -150,17 +153,19 @@ const Product = (props) => {
   };
 
   const handleClick = () => {
-    //LS
+   
 
-    let products = [];
-    if (localStorage.getItem("products")) {
-      products = JSON.parse(localStorage.getItem("products"));
-    } 
-    products.push({ ...product, quantity, color, size });
-    localStorage.setItem("products", JSON.stringify(products));
+    // let products = [];
+    // // let Id=uuidv4();
+    // if (localStorage.getItem("products")) {
+    //   products = JSON.parse(localStorage.getItem("products"));
+    // } 
+    // // setComId(Id.stringify())
+    // products.push({ ...product, quantity, color, size });
+    // localStorage.setItem("products", JSON.stringify(products));
 
+    dispatch(addToCart(product._id, quantity,color, size));
     
-    dispatch(addProduct({ ...product, quantity, color, size }));
   };
   return (
     <Container>
